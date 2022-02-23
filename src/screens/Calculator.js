@@ -8,48 +8,48 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {add} from '../redux/UserSlice';
+import LottieView from 'lottie-react-native';
+import {useForm, Controller} from 'react-hook-form';
 
 const Calculator = () => {
-  const [firstValue, setFirstValue] = useState();
-  const [secondValue, setSecondValue] = useState();
+  const count = useSelector(state => state.user.name);
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: {
+      firstValue: '',
+      secondValue: '',
+    },
+  });
+
+  const dispatch = useDispatch();
   const [task, setTask] = useState('');
   const [ans, setAns] = useState('');
 
-  const [isAdd, setIsAdd] = useState(false);
-  const [isSub, setIsSub] = useState(false);
-  const [isMul, setIsMul] = useState(false);
-  const [isDiv, setIsDiv] = useState(false);
-  const [error, setError] = useState({});
+  // const [isAdd, setIsAdd] = useState(false);
+  // const [isSub, setIsSub] = useState(false);
+  // const [isMul, setIsMul] = useState(false);
+  // const [isDiv, setIsDiv] = useState(false);
+  //const [error, setError] = useState({});
 
-  const onSubmit = () => {
-    let first = parseInt(firstValue);
-    let second = parseInt(secondValue);
-    if (!firstValue && !secondValue) {
-      setError({
-        name: 'error',
-        msg: 'Please Enter the Values',
-      });
-    } else if (!firstValue) {
-      setError({
-        name: 'first',
-        msg: 'Please Enter First Value',
-      });
-    } else if (!secondValue) {
-      setError({
-        name: 'second',
-        msg: 'Please Enter Second Value',
-      });
-    } else {
-      if (task === 'Add') {
-        setAns(first + second);
-      } else if (task === 'Sub') {
-        setAns(first - second);
-      } else if (task === 'Mul') {
-        setAns(first * second);
-      } else if (task === 'Div') {
-        setAns(first / second);
-      }
+  const onSubmit = data => {
+    let first = parseInt(data.firstValue);
+    let second = parseInt(data.secondValue);
+    if (task === 'Add') {
+      setAns(first + second);
+    } else if (task === 'Sub') {
+      setAns(first - second);
+    } else if (task === 'Mul') {
+      setAns(first * second);
+    } else if (task === 'Div') {
+      setAns(first / second);
     }
+    dispatch(add(ans));
   };
   return (
     <View style={styles.container}>
@@ -57,77 +57,84 @@ const Calculator = () => {
         <Text style={styles.ans}>
           {ans ? `Calculated Value is ${ans.toFixed(2)}` : ''}
         </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter first Value"
-          placeholderTextColor={'black'}
-          keyboardType="number-pad"
-          value={firstValue}
-          onChangeText={e => setFirstValue(e)}
-          onChange={() => (setAns(''), setError({}))}
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter first Value"
+              placeholderTextColor={'black'}
+              keyboardType="number-pad"
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          )}
+          name="firstValue"
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter second Value"
-          placeholderTextColor={'black'}
-          keyboardType="number-pad"
-          value={secondValue}
-          onChangeText={e => setSecondValue(e)}
-          onChange={() => (setAns(''), setError({}))}
+        {errors.firstValue && <Text style={styles.error}>Please enter first value.</Text>}
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Second Value"
+              placeholderTextColor={'black'}
+              keyboardType="number-pad"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="secondValue"
+          rules={{required: true}}
+         
         />
-        <Text style={{...styles.error, height: 25}}>
-          {error ? error.msg : ''}
-        </Text>
+         {errors.secondValue && <Text style={styles.error}>Please enter second value.</Text>}
+
         <View style={{flexDirection: 'row', paddingBottom: 20}}>
           <TouchableOpacity
-            style={{...styles.button, backgroundColor: isAdd ? 'green' : 'red'}}
-            onPress={() => (
-              setTask('Add'),
-              setIsAdd(true),
-              setIsSub(false),
-              setIsMul(false),
-              setIsDiv(false)
-            )}>
+            style={{
+              ...styles.button,
+              backgroundColor: task === 'Add' ? 'green' : 'red',
+            }}
+            onPress={() => setTask('Add')}>
             <Text style={styles.text}>Add</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{...styles.button, backgroundColor: isSub ? 'green' : 'red'}}
-            onPress={() => (
-              setTask('Sub'),
-              setIsAdd(false),
-              setIsSub(true),
-              setIsMul(false),
-              setIsDiv(false)
-            )}>
+            style={{
+              ...styles.button,
+              backgroundColor: task === 'Sub' ? 'green' : 'red',
+            }}
+            onPress={() => setTask('Sub')}>
             <Text style={styles.text}>Subtract</Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
-            style={{...styles.button, backgroundColor: isMul ? 'green' : 'red'}}
-            onPress={() => (
-              setTask('Mul'),
-              setIsAdd(false),
-              setIsSub(false),
-              setIsMul(true),
-              setIsDiv(false)
-            )}>
+            style={{
+              ...styles.button,
+              backgroundColor: task === 'Mul' ? 'green' : 'red',
+            }}
+            onPress={() => setTask('Mul')}>
             <Text style={styles.text}>Multiply</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{...styles.button, backgroundColor: isDiv ? 'green' : 'red'}}
-            onPress={() => (
-              setTask('Div'),
-              setIsAdd(false),
-              setIsSub(false),
-              setIsMul(false),
-              setIsDiv(true)
-            )}>
+            style={{
+              ...styles.button,
+              backgroundColor: task === 'Div' ? 'green' : 'red',
+            }}
+            onPress={() => setTask('Div')}>
             <Text style={styles.text}>Divide</Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.submit} onPress={() => onSubmit()}>
+          <TouchableOpacity
+            style={styles.submit}
+            onPress={handleSubmit(onSubmit)}>
             <Text style={styles.text}>Submit</Text>
           </TouchableOpacity>
         </View>
