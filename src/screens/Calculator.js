@@ -19,6 +19,7 @@ const Calculator = () => {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: {errors},
   } = useForm({
     defaultValues: {
@@ -36,7 +37,7 @@ const Calculator = () => {
   // const [isMul, setIsMul] = useState(false);
   // const [isDiv, setIsDiv] = useState(false);
   //const [error, setError] = useState({});
-
+   console.log(control._formValues.firstValue)
   const onSubmit = data => {
     let first = parseInt(data.firstValue);
     let second = parseInt(data.secondValue);
@@ -54,6 +55,7 @@ const Calculator = () => {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
+      <LottieView source={require('../assets/97311-truck.json')} autoPlay loop />
         <Text style={styles.ans}>
           {ans ? `Calculated Value is ${ans.toFixed(2)}` : ''}
         </Text>

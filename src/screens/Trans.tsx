@@ -1,4 +1,5 @@
 import React from 'react';
+import LottieView from 'lottie-react-native';
 import {SafeAreaView,Button, StyleSheet, View, Text, StatusBar} from 'react-native';
 // Localization.ts code can be found here: https://gist.github.com/naishe/a6d9ea9d23214875ac176b63387ab833
 import '../initI18next';
@@ -17,12 +18,13 @@ const Trans = () => {
       <SafeAreaView style={styles.main}>
         <View>
         {/* <Text>{t('common:currentLanguage', { lng: i18n.language })}</Text> */}
-          <Text>{t('Welcome to React')}</Text>
+        <LottieView source={require('../assets/96372-loader-5.json')} autoPlay loop />
+          <Text>{t('hello')}</Text>
           <Button
           onPress={() => {
-            i18n.changeLanguage('hi');
+            i18n.changeLanguage('tn');
           }}
-          title="Change to hindi"
+          title="Change to Tamil"
         />
         <Button
           onPress={() => {

@@ -12,6 +12,8 @@ target 'Codingmart' do
     :hermes_enabled => false
   )
 
+  pod 'RealmJS', :path => '../node_modules/realm'
+
   target 'CodingmartTests' do
     inherit! :complete
     # Pods for testing

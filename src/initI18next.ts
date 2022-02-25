@@ -52,13 +52,21 @@ import i18n, {
         en: {
           translation: {
             'Welcome to React': 'Welcome to React and react-i18next',
+              'hello':'hello'
           },
         },
         hi: {
           translation: {
             'Welcome to React': 'रियेक्ट तथा रियेक्ट-आई १८ एन  में आपका स्वागत है',
+            'hello':'नमस्ते'
           },
         },
+        tn:{
+          translation: {
+            'hello':'வணக்கம்'
+          },
+
+        }
       },
       react: {
         useSuspense: false,
