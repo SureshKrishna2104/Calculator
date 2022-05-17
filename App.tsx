@@ -18,6 +18,7 @@ import {Provider} from 'react-redux';
 import hookForm from './src/screens/hookForm';
 import Trans from './src/screens/Trans';
 import Realm from './src/screens/Realm';
+import Login from './src/screens/Login';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -45,7 +46,7 @@ const showNotification = (
     <NavigationContainer>
       <Provider store={store}>
         <Stack.Navigator>
-          <Stack.Screen name="Register" component={Realm} />
+          <Stack.Screen name="Register" component={Login} />
         </Stack.Navigator>
       </Provider>
     </NavigationContainer>

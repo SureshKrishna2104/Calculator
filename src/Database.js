@@ -41,6 +41,10 @@ let realm = new Realm({schema: [BookSchema,UserSchema, AuthorSchema], schemaVers
 let getAllBooks = () => {
     return realm.objects('Book');
 };
+//getallUsers
+let getAllUsers=()=>{
+    return realm.objects('User')
+}
 
 // Add a single book using parameters
 let addBook = (_title, _pages, _edition = null, _author) => {
@@ -52,6 +56,15 @@ let addBook = (_title, _pages, _edition = null, _author) => {
             author: _author
         });
     });
+}
+
+let addUser=(name,pwd)=>{
+    realm.write(()=>{
+        realm.create('User',{
+            name:name,
+            address:pwd
+        })
+    })
 }
 
 // Remove all books from Realm database
@@ -78,6 +91,9 @@ let getBigBooks = () => {
     return realm.objects('Book').filtered('pages > 400');
 }
 
+let getUser=(Username)=>{
+    return realm.objects('User').filtered(`name=${Username}`)
+}
 // Get all authors
 let getAllAuthors = () => {
     return realm.objects('Author');
@@ -109,7 +125,6 @@ let getAuthorById = (_id) => {
     return realm.objects('Author').filtered(`id = ${_id}`);
 }
 
-// Exports
 // Export the realm so other files can access it
 export default realm;
 
@@ -123,5 +138,8 @@ export {
     getAllAuthors,
     addAuthor,
     getAuthorById,
-    deleteAllAuthors
+    deleteAllAuthors,
+    addUser,
+    getAllUsers,
+    getUser
 }
